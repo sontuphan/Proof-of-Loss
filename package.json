@@ -1,0 +1,18 @@
+{
+  "name": "proof_of_loss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "",
+    "deploy": "",
+    "build": "truffle compile --all && truffle migrate --reset",
+    "net": "ganache-cli -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
