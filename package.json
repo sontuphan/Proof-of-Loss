@@ -7,12 +7,18 @@
     "test": "test"
   },
   "scripts": {
-    "start": "",
-    "deploy": "",
-    "build": "truffle compile --all && truffle migrate --reset",
+    "start": "npm run build && npm run deploy && truffle exec app/app.js --network development",
+    "deploy": "truffle migrate --reset",
+    "build": "rm -rf build && truffle compile --all",
     "net": "ganache-cli -m \"concert load couple harbor equip island argue ramp clarify fence smart topic\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node app/debug.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "web3": "^0.19.0"
+  }
 }

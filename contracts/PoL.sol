@@ -6,14 +6,16 @@ contract PoL {
     struct pol {
         address receiver;
         uint initialBlockNumber;
+        uint deposit;
     }
     address public master;
-    uint constant public BLOCK_COUNT = 1000;
+    uint constant public BLOCK_COUNT = 2;
     mapping (address => pol) public getPoL;
     
     event IsValidPoL(address indexed _owner, uint _numberOfConfirmation, bool _state);
     event RecoverBalance(address indexed _owner, address indexed _receiver, bool _state);
     event ApprovePoL(address indexed _owner, uint _value, bool _state);
+    event RejectPoL(address indexed _owner, uint _value, bool _state);
 
     // Constructor
     function PoL() {
@@ -69,6 +71,24 @@ contract PoL {
         RecoverBalance(_owner, _receiver, true);
     }
 
+    function rejectPoL()
+        public
+    {
+        address _owner = msg.sender;
+        require(existedPoL(_owner));
+        uint _value = getPoL[_owner].deposit;
+        bool _success = _owner.send(_value);
+
+        if (_success) {
+            getPoL[_owner].receiver = address(0);
+            getPoL[_owner].initialBlockNumber = 0;
+            getPoL[_owner].deposit = 0;
+            RejectPoL(_owner, _value, true);
+        } else {
+            RejectPoL(_owner, _value, false);
+        }
+    }   
+
     function approvePoL(address _owner, uint _value)
         private
         returns (bool)
@@ -76,20 +96,24 @@ contract PoL {
         address _receiver = getPoL[_owner].receiver;
         bool _success = _receiver.send(_value);
         return _success;
-    }  
+    }   
 
     function() payable {
-        require(msg.value > 0);
-        require(isValidPoL(msg.sender));
+        address _owner = msg.sender;
+        uint _value = msg.value;
 
-        bool _success = approvePoL(msg.sender, msg.value);
+        require(_value > 0);
+        require(isValidPoL(_owner));
+
+        bool _success = approvePoL(_owner, _value);
 
         if (_success) {
-            getPoL[msg.sender].receiver = address(0);
-            getPoL[msg.sender].initialBlockNumber = 0;
-            ApprovePoL(msg.sender, msg.value, true);
+            getPoL[_owner].receiver = address(0);
+            getPoL[_owner].initialBlockNumber = 0;
+            getPoL[_owner].deposit = 0;
+            ApprovePoL(_owner, _value, true);
         } else {
-            ApprovePoL(msg.sender, msg.value, false);
+            ApprovePoL(_owner, _value, false);
         }
     }
 
