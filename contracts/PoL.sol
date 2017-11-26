@@ -68,6 +68,7 @@ contract PoL {
         address _receiver = msg.sender;
         getPoL[_owner].receiver = _receiver;
         getPoL[_owner].initialBlockNumber = block.number;
+        getPoL[_owner].deposit = msg.value;
         RecoverBalance(_owner, _receiver, true);
     }
 
@@ -130,5 +131,5 @@ contract PoL {
     {
         require(msg.sender == master);
         selfdestruct(master);
-    } 
+    }
 }

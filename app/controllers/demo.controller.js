@@ -86,8 +86,14 @@ var Demo = {
      * @param {object} res - in case of error, res return 404 error
      */
     sendTheTx: function (req, res) {
+        var owner = req.body.owner;
+
+        if (!owner) {
+            return res.send({ state: 'error', error: ERROR });
+        }
+
         web3.eth.sendTransaction(
-            { from: global.coinbase, value: web3.toWei(10, 'ether') },
+            { from: global.coinbase, to: owner, value: web3.toWei(10, 'ether') },
             function (er, re) {
                 if (er) {
                     console.log('Error:', er);
@@ -144,7 +150,7 @@ var Demo = {
         var re = web3.fromWei(balance, 'ether');
         console.log('Transaction successful:', re);
         return res.send({ state: 'success', data: re });
-    },
+    }
 }
 
 module.exports = Demo;

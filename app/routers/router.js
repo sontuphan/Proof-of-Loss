@@ -21,5 +21,4 @@ router.post('/get-balance', demo.getBalance);
 router.post('/reject-pol', demo.rejectPoL);
 router.post('/send-the-tx', demo.sendTheTx);
 
-
 module.exports = router;
